@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -19,20 +21,22 @@ export default async function DashboardPage() {
     .single();
 
   // Tasks as client
-  const { data: clientTasks = [] } = await supabase
+  const { data: clientTasksData } = await supabase
     .from("tasks")
     .select("*, offers(count)")
     .eq("client_id", user.id)
     .order("created_at", { ascending: false })
     .limit(10);
+  const clientTasks: Task[] = (clientTasksData as Task[]) ?? [];
 
   // Tasks as knight
-  const { data: knightTasks = [] } = await supabase
+  const { data: knightTasksData } = await supabase
     .from("tasks")
     .select("*, client:profiles!tasks_client_id_fkey(id, display_name)")
     .eq("knight_id", user.id)
     .order("created_at", { ascending: false })
     .limit(10);
+  const knightTasks: Task[] = (knightTasksData as Task[]) ?? [];
 
   const handleSignOut = async () => {
     "use server";
@@ -97,7 +101,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {(clientTasks as Task[]).map((task) => (
+            {clientTasks.map((task) => (
               <Link
                 key={task.id}
                 href={`/tasks/${task.id}`}
@@ -133,7 +137,7 @@ export default async function DashboardPage() {
             Мои задания (рыцарь)
           </h2>
           <div className="space-y-3">
-            {(knightTasks as Task[]).map((task) => (
+            {knightTasks.map((task) => (
               <Link
                 key={task.id}
                 href={`/tasks/${task.id}`}

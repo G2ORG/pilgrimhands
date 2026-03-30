@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 
-const serviceClient = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
@@ -31,18 +33,20 @@ export async function POST(request: Request) {
     );
   }
 
+  const db = getServiceClient();
+
   switch (event.type) {
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object;
       const taskId = paymentIntent.metadata?.task_id;
 
       if (taskId) {
-        await serviceClient
+        await db
           .from("transactions")
           .update({ status: "held" })
           .eq("stripe_payment_intent_id", paymentIntent.id);
 
-        await serviceClient
+        await db
           .from("tasks")
           .update({ status: "in_progress" })
           .eq("id", taskId);
@@ -52,7 +56,7 @@ export async function POST(request: Request) {
 
     case "payment_intent.payment_failed": {
       const paymentIntent = event.data.object;
-      await serviceClient
+      await db
         .from("transactions")
         .update({ status: "failed" })
         .eq("stripe_payment_intent_id", paymentIntent.id);
@@ -61,7 +65,7 @@ export async function POST(request: Request) {
 
     case "transfer.created": {
       const transfer = event.data.object;
-      await serviceClient
+      await db
         .from("transactions")
         .update({ status: "released", stripe_transfer_id: transfer.id })
         .eq("stripe_payment_intent_id", transfer.source_transaction as string);

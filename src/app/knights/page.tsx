@@ -1,10 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 
 export default async function KnightsPage() {
   const supabase = await createClient();
 
-  const { data: knights = [] } = await supabase
+  const { data: knightsData } = await supabase
     .from("knights")
     .select(`
       id, skills, languages, location_name, rating, completed_count,
@@ -13,6 +15,8 @@ export default async function KnightsPage() {
     .eq("verification_status", "verified")
     .order("rating", { ascending: false })
     .limit(50);
+
+  const knights: any[] = knightsData ?? [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
@@ -40,7 +42,8 @@ export default async function TasksPage({
     query = query.eq("is_remote", true);
   }
 
-  const { data: tasks = [] } = await query.limit(50);
+  const { data: tasksData } = await query.limit(50);
+  const tasks: Task[] = (tasksData as Task[]) ?? [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

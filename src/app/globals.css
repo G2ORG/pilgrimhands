@@ -1,31 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #1a0a0e;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a0a0e;
-    --foreground: #f5e6e9;
-  }
+@theme {
+  /* OPC brand colors */
+  --color-crimson-50: #fff1f2;
+  --color-crimson-100: #ffe4e6;
+  --color-crimson-200: #fecdd3;
+  --color-crimson-300: #fda4af;
+  --color-crimson-500: #9b1c2e;
+  --color-crimson-600: #7f1424;
+  --color-crimson-700: #63101c;
+  --color-crimson-900: #3b0a11;
+  --color-gold-400: #f4c542;
+  --color-gold-500: #e6b020;
+  --color-gold-600: #c99a12;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: white;
+  color: #1a0a0e;
   font-family: Georgia, "Times New Roman", serif;
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-crimson-600 hover:bg-crimson-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors;
+    @apply bg-crimson-600 hover:bg-crimson-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors inline-block text-center;
   }
   .btn-secondary {
-    @apply border border-crimson-600 text-crimson-600 hover:bg-crimson-50 font-semibold px-6 py-3 rounded-lg transition-colors;
+    @apply border border-crimson-600 text-crimson-600 hover:bg-crimson-50 font-semibold px-6 py-3 rounded-lg transition-colors inline-block text-center;
   }
   .card {
     @apply bg-white border border-gray-200 rounded-xl shadow-sm p-6;
