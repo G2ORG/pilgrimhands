@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a0a0e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a0a0e;
+    --foreground: #f5e6e9;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-crimson-600 hover:bg-crimson-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors;
+  }
+  .btn-secondary {
+    @apply border border-crimson-600 text-crimson-600 hover:bg-crimson-50 font-semibold px-6 py-3 rounded-lg transition-colors;
+  }
+  .card {
+    @apply bg-white border border-gray-200 rounded-xl shadow-sm p-6;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}
