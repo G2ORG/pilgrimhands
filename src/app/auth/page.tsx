@@ -4,12 +4,14 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { useLang } from "@/contexts/LangContext";
 
 function AuthForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? "/dashboard";
   const defaultTab = searchParams.get("tab") === "signup" ? "signup" : "login";
+  const { t } = useLang();
 
   const [tab, setTab] = useState<"login" | "signup">(defaultTab);
   const [email, setEmail] = useState("");
@@ -42,7 +44,7 @@ function AuthForm() {
       },
     });
     if (error) { setError(error.message); setLoading(false); return; }
-    setSuccess("Check your email and confirm your address.");
+    setSuccess(t('auth_checkEmail'));
     setLoading(false);
   };
 
@@ -62,27 +64,27 @@ function AuthForm() {
             <span style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.4rem', color: '#c9952a' }}>PilgrimHands</span>
           </Link>
           <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.4rem', color: '#c9952a' }}>
-            {tab === "login" ? "Sign In" : "Create Account"}
+            {tab === "login" ? t('auth_signIn') : t('auth_createAccount')}
           </h1>
         </div>
 
         <div className="card">
           {/* Tabs */}
           <div style={{ display: 'flex', background: '#060402', border: '1px solid #3a2f1a', marginBottom: '1.5rem' }}>
-            {(["login", "signup"] as const).map((t) => (
+            {(["login", "signup"] as const).map((tabKey) => (
               <button
-                key={t}
-                onClick={() => setTab(t)}
+                key={tabKey}
+                onClick={() => setTab(tabKey)}
                 style={{
                   flex: 1, padding: '0.6rem',
                   fontFamily: "'Cinzel', serif", fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-                  background: tab === t ? 'rgba(201,149,42,0.15)' : 'transparent',
-                  color: tab === t ? '#c9952a' : '#7a6a50',
+                  background: tab === tabKey ? 'rgba(201,149,42,0.15)' : 'transparent',
+                  color: tab === tabKey ? '#c9952a' : '#7a6a50',
                   border: 'none', cursor: 'pointer',
-                  borderBottom: tab === t ? '2px solid #c9952a' : '2px solid transparent',
+                  borderBottom: tab === tabKey ? '2px solid #c9952a' : '2px solid transparent',
                 }}
               >
-                {t === "login" ? "Sign In" : "Register"}
+                {tabKey === "login" ? t('auth_signIn') : t('auth_register')}
               </button>
             ))}
           </div>
@@ -104,38 +106,38 @@ function AuthForm() {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            Continue with Google
+            {t('auth_google')}
           </button>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
             <div style={{ flex: 1, height: '1px', background: '#3a2f1a' }} />
-            <span style={{ color: '#7a5c1a', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace" }}>or</span>
+            <span style={{ color: '#7a5c1a', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace" }}>{t('auth_or')}</span>
             <div style={{ flex: 1, height: '1px', background: '#3a2f1a' }} />
           </div>
 
           <form onSubmit={tab === "login" ? handleLogin : handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {tab === "signup" && (
               <div>
-                <label className="label">Name</label>
+                <label className="label">{t('auth_name')}</label>
                 <input
                   type="text" required value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="John Pilgrim"
+                  placeholder={t('auth_name_ph')}
                   className="input-field"
                 />
               </div>
             )}
             <div>
-              <label className="label">Email</label>
+              <label className="label">{t('auth_email')}</label>
               <input
                 type="email" required value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={t('auth_email_ph')}
                 className="input-field"
               />
             </div>
             <div>
-              <label className="label">Password</label>
+              <label className="label">{t('auth_password')}</label>
               <input
                 type="password" required minLength={6} value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -161,7 +163,7 @@ function AuthForm() {
               className="btn-primary"
               style={{ width: '100%', padding: '0.85rem', opacity: loading ? 0.5 : 1 }}
             >
-              {loading ? "..." : tab === "login" ? "Sign In" : "Create Account"}
+              {loading ? t('loading') : tab === "login" ? t('auth_signIn') : t('auth_createAccount')}
             </button>
           </form>
         </div>
@@ -174,7 +176,7 @@ export default function AuthPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7a6a50' }}>
-        Loading...
+        ...
       </div>
     }>
       <AuthForm />

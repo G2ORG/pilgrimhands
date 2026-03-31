@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useLang } from "@/contexts/LangContext";
 
 const SKILLS = [
   "Pilgrimage", "Translation", "Driving", "Photography", "Videography",
@@ -17,6 +18,7 @@ const LANGUAGES = [
 
 export default function KnightOnboardingPage() {
   const router = useRouter();
+  const { t } = useLang();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
@@ -95,11 +97,10 @@ export default function KnightOnboardingPage() {
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>⚔️</div>
         <h1 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.6rem', color: '#c9952a', marginBottom: '0.5rem' }}>
-          Become a Knight
+          {t('onboard_title')}
         </h1>
         <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>
-          Fill in your profile and help pilgrims worldwide.
-          Our moderators will review your application within 48 hours.
+          {t('onboard_sub')}
         </p>
       </div>
 
@@ -125,30 +126,30 @@ export default function KnightOnboardingPage() {
       <div className="card">
         {step === 1 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem' }}>About Yourself</h2>
+            <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem' }}>{t('onboard_step1')}</h2>
             <div>
-              <label className="label">Tell us about yourself *</label>
+              <label className="label">{t('onboard_bio')}</label>
               <textarea
                 rows={4} required
                 value={form.bio}
                 onChange={(e) => setForm({ ...form, bio: e.target.value })}
-                placeholder="Who you are, where you are located, your experience with the Order and helping pilgrims..."
+                placeholder={t('onboard_bio_ph')}
                 className="input-field"
                 style={{ resize: 'none' }}
               />
             </div>
             <div>
-              <label className="label">Your city / region *</label>
+              <label className="label">{t('onboard_city')}</label>
               <input
                 type="text" required
                 value={form.location_name}
                 onChange={(e) => setForm({ ...form, location_name: e.target.value })}
-                placeholder="Batumi, Georgia"
+                placeholder={t('onboard_city_ph')}
                 className="input-field"
               />
             </div>
             <div>
-              <label className="label">Work radius: {form.radius_km} km</label>
+              <label className="label">{t('onboard_radius')}: {form.radius_km} km</label>
               <input
                 type="range" min={5} max={500} step={5}
                 value={form.radius_km}
@@ -162,16 +163,16 @@ export default function KnightOnboardingPage() {
               className="btn-primary"
               style={{ width: '100%', opacity: (!form.bio || !form.location_name) ? 0.5 : 1 }}
             >
-              Next →
+              {t('next')}
             </button>
           </div>
         )}
 
         {step === 2 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem' }}>Skills & Languages</h2>
+            <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem' }}>{t('onboard_step2')}</h2>
             <div>
-              <label className="label">What can you do? (select all that apply)</label>
+              <label className="label">{t('onboard_skills')}</label>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {SKILLS.map((skill) => (
                   <button key={skill} type="button" onClick={() => toggleSkill(skill)} style={tagStyle(form.skills.includes(skill))}>
@@ -181,7 +182,7 @@ export default function KnightOnboardingPage() {
               </div>
             </div>
             <div>
-              <label className="label">Languages</label>
+              <label className="label">{t('onboard_langs')}</label>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {LANGUAGES.map((lang) => (
                   <button key={lang} type="button" onClick={() => toggleLang(lang)} style={tagStyle(form.languages.includes(lang))}>
@@ -191,14 +192,14 @@ export default function KnightOnboardingPage() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <button onClick={() => setStep(1)} className="btn-secondary" style={{ flex: 1 }}>← Back</button>
+              <button onClick={() => setStep(1)} className="btn-secondary" style={{ flex: 1 }}>{t('back')}</button>
               <button
                 onClick={() => setStep(3)}
                 disabled={form.skills.length === 0}
                 className="btn-primary"
                 style={{ flex: 1, opacity: form.skills.length === 0 ? 0.5 : 1 }}
               >
-                Next →
+                {t('next')}
               </button>
             </div>
           </div>
@@ -206,13 +207,13 @@ export default function KnightOnboardingPage() {
 
         {step === 3 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem' }}>Confirmation</h2>
+            <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem' }}>{t('onboard_step3')}</h2>
             <div style={{ background: '#060402', border: '1px solid #3a2f1a', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {[
-                { label: "City", value: form.location_name },
-                { label: "Radius", value: `${form.radius_km} km` },
-                { label: "Skills", value: form.skills.join(", ") || "—" },
-                { label: "Languages", value: form.languages.join(", ") || "—" },
+                { label: t('onboard_city_label'), value: form.location_name },
+                { label: t('onboard_radius_label'), value: `${form.radius_km} km` },
+                { label: t('onboard_skills_label'), value: form.skills.join(", ") || "—" },
+                { label: t('onboard_langs_label'), value: form.languages.join(", ") || "—" },
               ].map(({ label, value }) => (
                 <div key={label} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.85rem' }}>
                   <span style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", minWidth: '80px' }}>{label}:</span>
@@ -222,8 +223,8 @@ export default function KnightOnboardingPage() {
             </div>
 
             <div style={{ background: 'rgba(201,149,42,0.08)', border: '1px solid #7a5c1a', padding: '1rem', fontSize: '0.85rem', color: '#d4b896', fontStyle: 'italic' }}>
-              <strong style={{ fontStyle: 'normal', color: '#c9952a' }}>Important:</strong> Your application will be reviewed by Order moderators
-              within 48 hours. You will receive an email notification after approval.
+              <strong style={{ fontStyle: 'normal', color: '#c9952a' }}>{t('onboard_note')}</strong>{' '}
+              {t('onboard_note_text')}
             </div>
 
             {error && (
@@ -233,14 +234,14 @@ export default function KnightOnboardingPage() {
             )}
 
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <button onClick={() => setStep(2)} className="btn-secondary" style={{ flex: 1 }}>← Back</button>
+              <button onClick={() => setStep(2)} className="btn-secondary" style={{ flex: 1 }}>{t('back')}</button>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
                 className="btn-primary"
                 style={{ flex: 1, opacity: loading ? 0.5 : 1 }}
               >
-                {loading ? "Submitting..." : "Submit Application ⚔️"}
+                {loading ? t('onboard_submitting') : t('onboard_submit')}
               </button>
             </div>
           </div>

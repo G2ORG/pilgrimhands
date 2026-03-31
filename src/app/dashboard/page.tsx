@@ -8,6 +8,7 @@ import {
   formatCurrency, formatDate, cn,
 } from "@/lib/utils";
 import type { Task } from "@/types";
+import { T } from "@/components/T";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.6rem', color: '#c9952a', marginBottom: '0.25rem' }}>
-            Cabinet
+            <T k="dash_title" f="Cabinet" />
           </h1>
           <p style={{ color: '#7a6a50', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.85rem' }}>
             {profile?.display_name ?? user.email}
@@ -67,15 +68,17 @@ export default async function DashboardPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: '#3a2f1a', marginBottom: '3rem' }}
         className="md:grid-cols-4">
         {[
-          { label: "My Tasks", value: clientTasks.length, icon: "📜" },
-          { label: "As Knight", value: knightTasks.length, icon: "⚔️" },
-          { label: "Role", value: profile?.role ?? "client", icon: "👤" },
-          { label: "Status", value: "Active", icon: "✅" },
+          { labelKey: "dash_stat_myTasks", label: "My Tasks", value: clientTasks.length, icon: "📜" },
+          { labelKey: "dash_stat_asKnight", label: "As Knight", value: knightTasks.length, icon: "⚔️" },
+          { labelKey: "dash_stat_role", label: "Role", value: profile?.role ?? "client", icon: "👤" },
+          { labelKey: "dash_stat_status", label: "Status", value: "Active", icon: "✅" },
         ].map((stat) => (
           <div key={stat.label} style={{ background: '#060402', padding: '1.5rem 1rem', textAlign: 'center' }}>
             <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{stat.icon}</div>
             <div style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.4rem', color: '#c9952a' }}>{stat.value}</div>
-            <div style={{ color: '#7a6a50', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace", marginTop: '2px' }}>{stat.label}</div>
+            <div style={{ color: '#7a6a50', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace", marginTop: '2px' }}>
+              <T k={stat.labelKey} f={stat.label} />
+            </div>
           </div>
         ))}
       </div>

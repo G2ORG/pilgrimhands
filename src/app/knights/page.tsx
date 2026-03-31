@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import { T } from "@/components/T";
 
 export default async function KnightsPage() {
   const supabase = await createClient();
@@ -23,24 +24,24 @@ export default async function KnightsPage() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.8rem', color: '#c9952a', marginBottom: '0.25rem' }}>
-            Knights of the Order
+            <T k="knightsTitle" f="Knights of the Order" />
           </h1>
           <p style={{ color: '#7a6a50', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.85rem' }}>
-            {knights.length} verified performers
+            {knights.length} <T k="knightsVerified" f="verified performers" />
           </p>
         </div>
         <Link href="/knight-onboarding" className="btn-secondary">
-          ⚔️ Become a Knight
+          <T k="becomeKnight" f="⚔️ Become a Knight" />
         </Link>
       </div>
 
       {knights.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '5rem 1rem' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚔️</div>
-          <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', marginBottom: '0.5rem' }}>No knights yet</h3>
-          <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>Be the first knight of the Order!</p>
+          <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', marginBottom: '0.5rem' }}><T k="noKnights" f="No knights yet" /></h3>
+          <p style={{ color: '#7a6a50', fontStyle: 'italic' }}><T k="noKnightsBe" f="Be the first knight of the Order!" /></p>
           <Link href="/knight-onboarding" className="btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>
-            Apply Now
+            <T k="apply" f="Apply Now" />
           </Link>
         </div>
       ) : (

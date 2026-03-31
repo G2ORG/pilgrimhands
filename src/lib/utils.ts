@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { TaskCategory, TaskStatus } from "@/types";
+export { CATEGORY_LABELS_I18N, STATUS_LABELS_I18N } from "@/lib/i18n";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

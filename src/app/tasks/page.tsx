@@ -7,6 +7,7 @@ import {
   formatCurrency, formatDate, cn,
 } from "@/lib/utils";
 import type { Task, TaskCategory } from "@/types";
+import { T } from "@/components/T";
 
 interface SearchParams {
   category?: string;
@@ -44,14 +45,14 @@ export default async function TasksPage({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.8rem', color: '#c9952a', marginBottom: '0.25rem' }}>
-            Open Tasks
+            <T k="openTasks" f="Open Tasks" />
           </h1>
           <p style={{ color: '#7a6a50', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.85rem' }}>
-            {tasks.length} tasks available
+            {tasks.length} <T k="tasksAvailable" f="tasks available" />
           </p>
         </div>
         <Link href="/tasks/new" className="btn-primary">
-          + Post a Task
+          <T k="postTask" f="+ Post a Task" />
         </Link>
       </div>
 
@@ -94,10 +95,10 @@ export default async function TasksPage({
       {tasks.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '5rem 1rem' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚔️</div>
-          <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', marginBottom: '0.5rem' }}>No tasks yet</h3>
-          <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>Be the first — post a task for the knights!</p>
+          <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', marginBottom: '0.5rem' }}><T k="noTasks" f="No tasks yet" /></h3>
+          <p style={{ color: '#7a6a50', fontStyle: 'italic' }}><T k="noTasksBe" f="Be the first — post a task for the knights!" /></p>
           <Link href="/tasks/new" className="btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>
-            Post a Task
+            <T k="postTask" f="Post a Task" />
           </Link>
         </div>
       ) : (
