@@ -11,8 +11,8 @@ const CATEGORIES = Object.keys(CATEGORY_LABELS) as TaskCategory[];
 const CURRENCIES = ["USD", "EUR", "GEL"];
 
 const taskSchema = z.object({
-  title: z.string().min(5, "Минимум 5 символов").max(200),
-  description: z.string().min(10, "Минимум 10 символов").optional(),
+  title: z.string().min(5).max(200),
+  description: z.string().min(10).optional(),
   category: z.enum(["pilgrimage", "delivery", "photography", "documents", "tech", "research", "representation", "other"]),
   location_name: z.string().optional(),
   is_remote: z.boolean(),
@@ -63,11 +63,7 @@ export default function NewTaskPage() {
       visibility: "public",
     };
 
-    const { data, error: dbError } = await supabase
-      .from("tasks")
-      .insert(payload)
-      .select()
-      .single();
+    const { data, error: dbError } = await supabase.from("tasks").insert(payload).select().single();
 
     if (dbError) {
       setError(dbError.message);
@@ -79,63 +75,61 @@ export default function NewTaskPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12">
-      <div className="mb-8">
-        <h1 className="font-serif text-3xl font-bold text-gray-900">Создать задачу</h1>
-        <p className="text-gray-500 mt-2">
-          Опишите что нужно сделать и рыцари Ордена откликнутся с предложениями.
+    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <div style={{ marginBottom: '2rem' }}>
+        <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.8rem', color: '#c9952a', marginBottom: '0.5rem' }}>
+          Post a Task
+        </h1>
+        <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>
+          Describe what needs to be done and knights of the Order will respond with offers.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Название задачи *
-          </label>
+          <label className="label">Task Title *</label>
           <input
-            type="text"
-            required
-            minLength={5}
+            type="text" required minLength={5}
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            placeholder="Например: Встретить паломников в аэропорту Тбилиси"
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:border-transparent"
+            placeholder="e.g. Meet pilgrims at Tbilisi airport"
+            className="input-field"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Описание
-          </label>
+          <label className="label">Description</label>
           <textarea
             rows={4}
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            placeholder="Подробности задачи: что именно нужно сделать, особые требования..."
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:border-transparent resize-none"
+            placeholder="Task details: what exactly needs to be done, special requirements..."
+            className="input-field"
+            style={{ resize: 'none' }}
           />
         </div>
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Категория *
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <label className="label">Category *</label>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }} className="sm:grid-cols-4">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setForm({ ...form, category: cat })}
-                className={`p-3 rounded-lg border text-sm text-center transition-colors ${
-                  form.category === cat
-                    ? "border-crimson-600 bg-crimson-50 text-crimson-700 font-medium"
-                    : "border-gray-200 hover:border-crimson-300"
-                }`}
+                style={{
+                  padding: '0.75rem 0.5rem', textAlign: 'center',
+                  border: `1px solid ${form.category === cat ? '#c9952a' : '#3a2f1a'}`,
+                  background: form.category === cat ? 'rgba(201,149,42,0.15)' : '#111009',
+                  color: form.category === cat ? '#c9952a' : '#7a6a50',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                  fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem',
+                }}
               >
-                <div className="text-xl mb-1">{CATEGORY_ICONS[cat]}</div>
+                <div style={{ fontSize: '1.4rem', marginBottom: '0.25rem' }}>{CATEGORY_ICONS[cat]}</div>
                 <div>{CATEGORY_LABELS[cat]}</div>
               </button>
             ))}
@@ -144,16 +138,16 @@ export default function NewTaskPage() {
 
         {/* Location / Remote */}
         <div>
-          <div className="flex items-center gap-3 mb-3">
-            <label className="text-sm font-medium text-gray-700">Формат</label>
-            <label className="flex items-center gap-2 cursor-pointer">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+            <label className="label" style={{ margin: 0 }}>Format</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#c0a880', fontSize: '0.9rem' }}>
               <input
                 type="checkbox"
                 checked={form.is_remote}
                 onChange={(e) => setForm({ ...form, is_remote: e.target.checked })}
-                className="w-4 h-4 accent-crimson-600"
+                style={{ accentColor: '#c9952a' }}
               />
-              <span className="text-sm text-gray-600">Удалённо (без привязки к месту)</span>
+              Remote (no location required)
             </label>
           </div>
           {!form.is_remote && (
@@ -161,60 +155,50 @@ export default function NewTaskPage() {
               type="text"
               value={form.location_name}
               onChange={(e) => setForm({ ...form, location_name: e.target.value })}
-              placeholder="Город / адрес, например: Батуми, Грузия"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:border-transparent"
+              placeholder="City / address, e.g. Batumi, Georgia"
+              className="input-field"
             />
           )}
         </div>
 
         {/* Budget */}
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Бюджет
-            </label>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ flex: 1 }}>
+            <label className="label">Budget</label>
             <input
-              type="number"
-              min={0}
-              step="0.01"
+              type="number" min={0} step="0.01"
               value={form.budget}
               onChange={(e) => setForm({ ...form, budget: e.target.value })}
               placeholder="0"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:border-transparent"
+              className="input-field"
             />
           </div>
-          <div className="w-28">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Валюта
-            </label>
+          <div style={{ width: '110px' }}>
+            <label className="label">Currency</label>
             <select
               value={form.currency}
               onChange={(e) => setForm({ ...form, currency: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:border-transparent"
+              className="input-field"
             >
-              {CURRENCIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
+              {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
         </div>
 
         {/* Deadline */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Дедлайн
-          </label>
+          <label className="label">Deadline</label>
           <input
             type="datetime-local"
             value={form.deadline}
             onChange={(e) => setForm({ ...form, deadline: e.target.value })}
             min={new Date().toISOString().slice(0, 16)}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:border-transparent"
+            className="input-field"
           />
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+          <div style={{ background: 'rgba(139,26,26,0.2)', border: '1px solid #8b1a1a', color: '#cc4444', padding: '0.75rem 1rem', fontSize: '0.85rem' }}>
             {error}
           </div>
         )}
@@ -222,17 +206,14 @@ export default function NewTaskPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full btn-primary py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary"
+          style={{ width: '100%', padding: '1rem', fontSize: '1rem', opacity: loading ? 0.5 : 1 }}
         >
-          {loading ? "Публикуем..." : "Опубликовать задачу →"}
+          {loading ? "Publishing..." : "Publish Task →"}
         </button>
 
-        <p className="text-center text-xs text-gray-400">
-          Публикуя задачу, вы соглашаетесь с{" "}
-          <a href="/terms" className="text-crimson-600 hover:underline">
-            условиями использования
-          </a>
-          . Оплата удерживается на эскроу до завершения.
+        <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace" }}>
+          By posting a task you agree to the terms of use. Payment is held in escrow until completion.
         </p>
       </form>
     </div>

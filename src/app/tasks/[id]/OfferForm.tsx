@@ -23,7 +23,7 @@ export function OfferForm({
 
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setError("Войдите в систему"); setLoading(false); return; }
+    if (!user) { setError("Please sign in first"); setLoading(false); return; }
 
     const { error: dbError } = await supabase.from("offers").insert({
       task_id: taskId,
@@ -34,56 +34,58 @@ export function OfferForm({
       status: "pending",
     });
 
-    if (dbError) {
-      setError(dbError.message);
-      setLoading(false);
-      return;
-    }
+    if (dbError) { setError(dbError.message); setLoading(false); return; }
 
     router.refresh();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex gap-3">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Цена ({currency}) *</label>
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ flex: 1 }}>
+          <label className="label">Price ({currency}) *</label>
           <input
             type="number" required min={0} step="0.01"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             placeholder="50"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-crimson-500"
+            className="input-field"
           />
         </div>
-        <div className="w-32">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Срок (часов)</label>
+        <div style={{ width: '120px' }}>
+          <label className="label">ETA (hours)</label>
           <input
             type="number" min={1}
             value={form.eta_hours}
             onChange={(e) => setForm({ ...form, eta_hours: e.target.value })}
             placeholder="24"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-crimson-500"
+            className="input-field"
           />
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Сообщение заказчику</label>
+        <label className="label">Message to client</label>
         <textarea
           rows={3}
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
-          placeholder="Кратко о себе и как вы выполните задачу..."
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-crimson-500 resize-none"
+          placeholder="Briefly about yourself and how you will complete the task..."
+          className="input-field"
+          style={{ resize: 'none' }}
         />
       </div>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && (
+        <p style={{ color: '#cc4444', fontSize: '0.85rem', background: 'rgba(139,26,26,0.2)', padding: '0.5rem 0.75rem', border: '1px solid #8b1a1a' }}>
+          {error}
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}
-        className="btn-primary w-full disabled:opacity-50"
+        className="btn-primary"
+        style={{ width: '100%', opacity: loading ? 0.5 : 1 }}
       >
-        {loading ? "Отправляем..." : "Подать предложение"}
+        {loading ? "Submitting..." : "Submit Offer"}
       </button>
     </form>
   );

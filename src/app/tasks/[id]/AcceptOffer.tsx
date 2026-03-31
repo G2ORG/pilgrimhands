@@ -20,13 +20,9 @@ export function AcceptOffer({
     setLoading(true);
     const supabase = createClient();
 
-    // Accept this offer, reject others
     await supabase.from("offers").update({ status: "rejected" }).eq("task_id", taskId);
     await supabase.from("offers").update({ status: "accepted" }).eq("id", offerId);
-    await supabase.from("tasks").update({
-      status: "assigned",
-      knight_id: knightId,
-    }).eq("id", taskId);
+    await supabase.from("tasks").update({ status: "assigned", knight_id: knightId }).eq("id", taskId);
 
     router.refresh();
   };
@@ -35,9 +31,10 @@ export function AcceptOffer({
     <button
       onClick={handleAccept}
       disabled={loading}
-      className="mt-2 text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded transition-colors disabled:opacity-50"
+      className="btn-primary"
+      style={{ marginTop: '0.5rem', fontSize: '0.7rem', padding: '0.3rem 0.75rem', opacity: loading ? 0.5 : 1 }}
     >
-      {loading ? "..." : "Принять"}
+      {loading ? "..." : "Accept"}
     </button>
   );
 }

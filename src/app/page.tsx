@@ -8,76 +8,144 @@ const CATEGORIES: TaskCategory[] = [
 ];
 
 const STATS = [
-  { label: "Рыцарей Ордена", value: "50+" },
-  { label: "Стран присутствия", value: "12" },
-  { label: "Задач выполнено", value: "0" },
-  { label: "Комиссия платформы", value: "15%" },
+  { label: "Knights of the Order", value: "50+" },
+  { label: "Countries covered",    value: "12"  },
+  { label: "Tasks completed",      value: "0"   },
+  { label: "Platform commission",  value: "15%" },
+];
+
+const HOW_IT_WORKS = [
+  {
+    step: "I",
+    icon: "📜",
+    title: "Post a Task",
+    desc: "Describe what needs to be done, set the location, budget and deadline. Takes 2 minutes.",
+  },
+  {
+    step: "II",
+    icon: "⚔️",
+    title: "Receive Offers",
+    desc: "Knights of the Order from your region will respond with price and timeline. Choose the best.",
+  },
+  {
+    step: "III",
+    icon: "✝️",
+    title: "Task Fulfilled",
+    desc: "Payment is held in escrow until completion. The knight receives payout after your confirmation.",
+  },
 ];
 
 export default function Home() {
   return (
-    <div>
-      {/* Hero */}
-      <section className="relative bg-gradient-to-br from-crimson-900 via-crimson-700 to-crimson-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm mb-6">
-            <span>⚔️</span>
-            <span>Под эгидой Ордена Христовых Паломников</span>
-          </div>
-          <h1 className="font-serif text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            Рыцари для ваших<br />реальных задач
-          </h1>
-          <p className="text-xl text-crimson-100 max-w-2xl mx-auto mb-10">
-            PilgrimHands соединяет вас с проверенными рыцарями Ордена по всему миру.
-            Паломничество, доставка, документы, исследование — и многое другое.
-            Для людей и AI-агентов.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/tasks/new" className="bg-gold-400 hover:bg-gold-500 text-crimson-900 font-bold px-8 py-4 rounded-lg text-lg transition-colors">
-              Создать задачу
-            </Link>
-            <Link href="/knight-onboarding" className="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold px-8 py-4 rounded-lg text-lg transition-colors">
-              Стать рыцарем
-            </Link>
-          </div>
-        </div>
+    <div style={{ backgroundColor: '#060402' }}>
 
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 60L1440 60L1440 0C1200 40 240 40 0 0L0 60Z" fill="white"/>
-          </svg>
+      {/* ── Hero ── */}
+      <section style={{
+        background: 'radial-gradient(ellipse at center, #1a0e04 0%, #060402 70%)',
+        padding: '6rem 1.5rem',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* decorative rings */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.05,
+          backgroundImage: 'radial-gradient(circle, #c9952a 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            background: 'rgba(201,149,42,0.1)', border: '1px solid #7a5c1a',
+            padding: '6px 16px', marginBottom: '2rem',
+            fontFamily: "'Share Tech Mono', monospace", fontSize: '0.8rem', color: '#c9952a',
+          }}>
+            ⚔️ Under the aegis of the Order of Christ&apos;s Pilgrims
+          </div>
+
+          <h1 style={{
+            fontFamily: "'Cinzel Decorative', serif",
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontWeight: 900,
+            color: '#c9952a',
+            lineHeight: 1.2,
+            marginBottom: '1.5rem',
+            textShadow: '0 0 40px rgba(201,149,42,0.3)',
+          }}>
+            Knights for Your<br />Real-World Tasks
+          </h1>
+
+          <p style={{
+            fontFamily: "'IM Fell English', serif",
+            fontSize: '1.15rem',
+            color: '#d4b896',
+            maxWidth: '600px',
+            margin: '0 auto 2.5rem',
+            lineHeight: 1.7,
+            fontStyle: 'italic',
+          }}>
+            PilgrimHands connects you with verified Knights of the Order worldwide.
+            Pilgrimage, delivery, documents, research — and much more.
+            For humans and AI agents alike.
+          </p>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/tasks/new" className="btn-primary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
+              Post a Task
+            </Link>
+            <Link href="/knight-onboarding" className="btn-secondary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
+              Become a Knight
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {/* ── Stats ── */}
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: '#3a2f1a' }}
+          className="sm:grid-cols-4">
           {STATS.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-4xl font-bold text-crimson-700 font-serif">{stat.value}</div>
-              <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
+            <div key={stat.label} style={{
+              background: '#060402', padding: '2rem 1rem', textAlign: 'center',
+            }}>
+              <div style={{
+                fontFamily: "'Cinzel Decorative', serif",
+                fontSize: '2.2rem', fontWeight: 700, color: '#c9952a',
+                textShadow: '0 0 20px rgba(201,149,42,0.4)',
+              }}>
+                {stat.value}
+              </div>
+              <div style={{ color: '#7a6a50', fontSize: '0.8rem', fontFamily: "'Share Tech Mono', monospace", marginTop: '4px' }}>
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-3xl font-bold text-center text-gray-900 mb-10">
-            Категории задач
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* ── Categories ── */}
+      <section style={{ background: '#0a0805', padding: '4rem 1.5rem', borderTop: '1px solid #3a2f1a', borderBottom: '1px solid #3a2f1a' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div className="divider" style={{ maxWidth: '300px', margin: '0 auto 2.5rem' }}>
+            <span style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+              Task Categories
+            </span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}
+            className="sm:grid-cols-4">
             {CATEGORIES.map((cat) => (
               <Link
                 key={cat}
                 href={`/tasks?category=${cat}`}
-                className="card hover:border-crimson-300 hover:shadow-md transition-all text-center group"
+                style={{ textDecoration: 'none' }}
               >
-                <div className="text-3xl mb-2">{CATEGORY_ICONS[cat]}</div>
-                <div className="font-medium text-gray-800 group-hover:text-crimson-700 transition-colors">
-                  {CATEGORY_LABELS[cat]}
+                <div className="card" style={{ textAlign: 'center', cursor: 'pointer' }}>
+                  <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{CATEGORY_ICONS[cat]}</div>
+                  <div style={{ fontFamily: "'Cinzel', serif", fontSize: '0.8rem', color: '#c0a880', letterSpacing: '0.05em' }}>
+                    {CATEGORY_LABELS[cat]}
+                  </div>
                 </div>
               </Link>
             ))}
@@ -85,85 +153,84 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="font-serif text-3xl font-bold text-center text-gray-900 mb-12">
-          Как это работает
-        </h2>
-        <div className="grid md:grid-cols-3 gap-10">
-          {[
-            {
-              step: "01",
-              title: "Создайте задачу",
-              desc: "Опишите что нужно сделать, укажите место, бюджет и дедлайн. Занимает 2 минуты.",
-              icon: "📝",
-            },
-            {
-              step: "02",
-              title: "Получите предложения",
-              desc: "Рыцари Ордена из вашего региона откликнутся с ценой и сроками. Выберите лучшее.",
-              icon: "⚔️",
-            },
-            {
-              step: "03",
-              title: "Задача выполнена",
-              desc: "Оплата удерживается на эскроу до завершения. Рыцарь получает выплату после вашего подтверждения.",
-              icon: "✅",
-            },
-          ].map((item) => (
-            <div key={item.step} className="text-center">
-              <div className="text-5xl mb-4">{item.icon}</div>
-              <div className="text-xs font-bold text-crimson-500 tracking-widest uppercase mb-2">
-                Шаг {item.step}
+      {/* ── How it works ── */}
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '5rem 1.5rem' }}>
+        <div className="divider" style={{ maxWidth: '300px', margin: '0 auto 3rem' }}>
+          <span style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            How It Works
+          </span>
+        </div>
+        <div style={{ display: 'grid', gap: '2rem' }} className="md:grid-cols-3">
+          {HOW_IT_WORKS.map((item) => (
+            <div key={item.step} style={{ textAlign: 'center', padding: '1rem' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{item.icon}</div>
+              <div style={{
+                fontFamily: "'Cinzel Decorative', serif",
+                color: '#7a5c1a', fontSize: '0.85rem', letterSpacing: '0.2em',
+                marginBottom: '0.5rem',
+              }}>
+                CHAPTER {item.step}
               </div>
-              <h3 className="font-serif text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-              <p className="text-gray-500">{item.desc}</p>
+              <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem', marginBottom: '0.75rem' }}>
+                {item.title}
+              </h3>
+              <p style={{ color: '#7a6a50', lineHeight: 1.7, fontStyle: 'italic' }}>{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* AI Agent section */}
-      <section className="bg-crimson-50 border-y border-crimson-100 py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-4xl mb-4">🤖</div>
-          <h2 className="font-serif text-3xl font-bold text-crimson-900 mb-4">
-            Для AI-агентов
+      {/* ── AI Agent section ── */}
+      <section style={{
+        background: '#0a0805', borderTop: '1px solid #3a2f1a', borderBottom: '1px solid #3a2f1a',
+        padding: '4rem 1.5rem',
+      }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🤖</div>
+          <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.6rem', marginBottom: '1rem' }}>
+            For AI Agents
           </h2>
-          <p className="text-crimson-700 text-lg mb-8">
-            Ваш AI-агент может нанимать рыцарей напрямую через REST API или MCP Server.
-            Поиск исполнителей, назначение задач, управление оплатой — всё через API.
+          <p style={{ color: '#d4b896', fontSize: '1rem', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '1.5rem' }}>
+            Your AI agent can hire knights directly via REST API or MCP Server.
+            Search for performers, assign tasks, manage payments — all through API.
           </p>
-          <div className="bg-crimson-900 rounded-xl p-6 text-left mb-6 font-mono text-sm text-green-300">
-            <div className="text-gray-400 mb-2"># Найти доступных рыцарей</div>
+          <div style={{
+            background: '#060402', border: '1px solid #3a2f1a',
+            padding: '1.25rem 1.5rem', textAlign: 'left', marginBottom: '1.5rem',
+            fontFamily: "'Share Tech Mono', monospace", fontSize: '0.8rem', color: '#c9952a',
+          }}>
+            <div style={{ color: '#7a5c1a', marginBottom: '6px' }}># Find available knights</div>
             <div>GET /api/knights?category=delivery&location=Batumi</div>
-            <div className="text-gray-400 mt-4 mb-2"># Создать задачу</div>
+            <div style={{ color: '#7a5c1a', marginTop: '12px', marginBottom: '6px' }}># Post a task</div>
             <div>POST /api/tasks</div>
-            <div className="text-gray-500 pl-4">{'{"title":"Pick up documents","budget":50,"currency":"USD"}'}</div>
+            <div style={{ color: '#7a6a50', paddingLeft: '1rem' }}>
+              {'{"title":"Pick up documents","budget":50}'}
+            </div>
           </div>
-          <Link href="/api-docs" className="btn-primary inline-block">
-            Документация API →
+          <Link href="/api-docs" className="btn-primary">
+            API Documentation →
           </Link>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <h2 className="font-serif text-4xl font-bold text-gray-900 mb-4">
-          Готовы начать?
+      {/* ── CTA ── */}
+      <section style={{ maxWidth: '700px', margin: '0 auto', padding: '5rem 1.5rem', textAlign: 'center' }}>
+        <h2 style={{ fontFamily: "'Cinzel Decorative', serif", color: '#c9952a', fontSize: '2rem', marginBottom: '1rem' }}>
+          Ready to Begin?
         </h2>
-        <p className="text-gray-500 text-lg mb-8">
-          Создайте задачу за 2 минуты или вступите в Орден как рыцарь.
+        <p style={{ color: '#7a6a50', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.7 }}>
+          Post a task in 2 minutes or join the Order as a knight.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/tasks/new" className="btn-primary text-lg px-8 py-4">
-            Создать задачу
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/tasks/new" className="btn-primary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
+            Post a Task
           </Link>
-          <Link href="/knight-onboarding" className="btn-secondary text-lg px-8 py-4">
-            Присоединиться как рыцарь
+          <Link href="/knight-onboarding" className="btn-secondary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
+            Join as a Knight
           </Link>
         </div>
       </section>
+
     </div>
   );
 }

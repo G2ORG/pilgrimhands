@@ -19,63 +19,76 @@ export default async function KnightsPage() {
   const knights: any[] = knightsData ?? [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="flex items-center justify-between mb-8">
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="font-serif text-3xl font-bold text-gray-900">Рыцари Ордена</h1>
-          <p className="text-gray-500 mt-1">
-            {knights.length} проверенных исполнителей
+          <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.8rem', color: '#c9952a', marginBottom: '0.25rem' }}>
+            Knights of the Order
+          </h1>
+          <p style={{ color: '#7a6a50', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.85rem' }}>
+            {knights.length} verified performers
           </p>
         </div>
         <Link href="/knight-onboarding" className="btn-secondary">
-          ⚔️ Стать рыцарем
+          ⚔️ Become a Knight
         </Link>
       </div>
 
       {knights.length === 0 ? (
-        <div className="text-center py-20">
-          <div className="text-5xl mb-4">⚔️</div>
-          <h3 className="font-serif text-xl text-gray-700 mb-2">Рыцари ещё не присоединились</h3>
-          <p className="text-gray-500">Станьте первым рыцарем Ордена!</p>
-          <Link href="/knight-onboarding" className="btn-primary inline-block mt-6">
-            Подать заявку
+        <div style={{ textAlign: 'center', padding: '5rem 1rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚔️</div>
+          <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', marginBottom: '0.5rem' }}>No knights yet</h3>
+          <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>Be the first knight of the Order!</p>
+          <Link href="/knight-onboarding" className="btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>
+            Apply Now
           </Link>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={{ display: 'grid', gap: '1.5rem' }} className="md:grid-cols-2 lg:grid-cols-3">
           {knights.map((knight: any) => (
-            <div key={knight.id} className="card hover:shadow-md transition-shadow">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-crimson-100 flex items-center justify-center text-crimson-700 font-bold text-lg shrink-0">
+            <div key={knight.id} className="card">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
+                <div style={{
+                  width: '48px', height: '48px', flexShrink: 0,
+                  background: 'rgba(201,149,42,0.15)', border: '1px solid #7a5c1a',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: "'Cinzel Decorative', serif", color: '#c9952a', fontSize: '1.2rem', fontWeight: 700,
+                }}>
                   {knight.profile?.display_name?.[0] ?? "?"}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{knight.profile?.display_name}</h3>
+                  <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c0a880', fontSize: '0.95rem' }}>
+                    {knight.profile?.display_name}
+                  </h3>
                   {knight.location_name && (
-                    <p className="text-gray-500 text-sm">📍 {knight.location_name}</p>
+                    <p style={{ color: '#7a6a50', fontSize: '0.8rem' }}>📍 {knight.location_name}</p>
                   )}
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-yellow-500 text-sm">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                    <span style={{ color: '#c9952a', fontSize: '0.8rem' }}>
                       {"★".repeat(Math.round(knight.rating))}{"☆".repeat(5 - Math.round(knight.rating))}
                     </span>
-                    <span className="text-gray-400 text-xs">{knight.completed_count} задач</span>
+                    <span style={{ color: '#7a5c1a', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace" }}>
+                      {knight.completed_count} tasks
+                    </span>
                   </div>
                 </div>
               </div>
 
               {knight.profile?.bio && (
-                <p className="text-gray-500 text-sm mb-4 line-clamp-2">{knight.profile.bio}</p>
+                <p style={{ color: '#7a6a50', fontSize: '0.85rem', marginBottom: '1rem', fontStyle: 'italic', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as React.CSSProperties}>
+                  {knight.profile.bio}
+                </p>
               )}
 
               {knight.skills?.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-4">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.75rem' }}>
                   {knight.skills.slice(0, 4).map((skill: string) => (
-                    <span key={skill} className="badge bg-gray-100 text-gray-600 text-xs px-2 py-0.5">
+                    <span key={skill} className="badge" style={{ background: 'rgba(201,149,42,0.08)', color: '#7a6a50', border: '1px solid #3a2f1a', padding: '2px 8px', fontSize: '0.7rem' }}>
                       {skill}
                     </span>
                   ))}
                   {knight.skills.length > 4 && (
-                    <span className="badge bg-gray-100 text-gray-500 text-xs px-2 py-0.5">
+                    <span className="badge" style={{ background: 'rgba(201,149,42,0.08)', color: '#7a5c1a', border: '1px solid #3a2f1a', padding: '2px 8px', fontSize: '0.7rem' }}>
                       +{knight.skills.length - 4}
                     </span>
                   )}
@@ -83,7 +96,7 @@ export default async function KnightsPage() {
               )}
 
               {knight.languages?.length > 0 && (
-                <p className="text-xs text-gray-400">
+                <p style={{ fontSize: '0.75rem', color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace" }}>
                   🌐 {knight.languages.join(" · ")}
                 </p>
               )}

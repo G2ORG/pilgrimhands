@@ -1,37 +1,15 @@
 export default function ApiDocsPage() {
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="font-serif text-3xl font-bold text-gray-900 mb-2">API Документация</h1>
-      <p className="text-gray-500 mb-10">
-        PilgrimHands REST API позволяет AI-агентам и разработчикам нанимать рыцарей программно.
-      </p>
-
-      {/* Authentication */}
-      <section className="mb-10">
-        <h2 className="font-serif text-xl font-bold text-gray-900 mb-4">Аутентификация</h2>
-        <div className="card">
-          <p className="text-gray-600 text-sm mb-4">
-            Используйте Bearer токен в заголовке <code className="bg-gray-100 px-1.5 py-0.5 rounded">Authorization</code>.
-            Получите API ключ в вашем кабинете.
-          </p>
-          <div className="bg-gray-900 rounded-lg p-4 font-mono text-sm text-green-300">
-            Authorization: Bearer ph_xxxxxxxxxxxxxxxx
-          </div>
-        </div>
-      </section>
-
-      {/* Endpoints */}
-      {[
-        {
-          method: "GET",
-          path: "/api/tasks",
-          desc: "Получить список открытых задач",
-          params: [
-            { name: "category", desc: "Фильтр по категории (pilgrimage, delivery, ...)" },
-            { name: "location", desc: "Поиск по месту" },
-            { name: "remote", desc: "true — только удалённые задачи" },
-          ],
-          response: `{
+  const endpoints = [
+    {
+      method: "GET",
+      path: "/api/tasks",
+      desc: "Get a list of open tasks",
+      params: [
+        { name: "category", desc: "Filter by category (pilgrimage, delivery, ...)" },
+        { name: "location", desc: "Search by location" },
+        { name: "remote", desc: "true — remote tasks only" },
+      ],
+      response: `{
   "tasks": [
     {
       "id": "uuid",
@@ -45,13 +23,13 @@ export default function ApiDocsPage() {
   ],
   "count": 1
 }`,
-        },
-        {
-          method: "POST",
-          path: "/api/tasks",
-          desc: "Создать новую задачу",
-          params: [],
-          body: `{
+    },
+    {
+      method: "POST",
+      path: "/api/tasks",
+      desc: "Create a new task",
+      params: [],
+      body: `{
   "title": "Pick up documents from notary",
   "description": "Need to collect 3 notarized documents",
   "category": "documents",
@@ -60,23 +38,23 @@ export default function ApiDocsPage() {
   "currency": "USD",
   "deadline": "2026-04-15T12:00:00Z"
 }`,
-          response: `{ "task": { "id": "uuid", "status": "open", ... } }`,
-        },
-        {
-          method: "GET",
-          path: "/api/knights",
-          desc: "Найти доступных рыцарей",
-          params: [
-            { name: "skill", desc: "Фильтр по навыку" },
-            { name: "location", desc: "Поиск по городу" },
-            { name: "language", desc: "Фильтр по языку" },
-          ],
-          response: `{
+      response: `{ "task": { "id": "uuid", "status": "open", ... } }`,
+    },
+    {
+      method: "GET",
+      path: "/api/knights",
+      desc: "Find available knights",
+      params: [
+        { name: "skill", desc: "Filter by skill" },
+        { name: "location", desc: "Search by city" },
+        { name: "language", desc: "Filter by language" },
+      ],
+      response: `{
   "knights": [
     {
       "id": "uuid",
       "display_name": "Brother Nikolai",
-      "skills": ["Паломничество", "Переводы"],
+      "skills": ["Pilgrimage", "Translation"],
       "location_name": "Batumi, Georgia",
       "rating": 4.8,
       "completed_count": 23
@@ -84,30 +62,63 @@ export default function ApiDocsPage() {
   ],
   "count": 1
 }`,
-        },
-      ].map((endpoint) => (
-        <section key={endpoint.path} className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <span className={`font-mono font-bold text-sm px-3 py-1 rounded ${
-              endpoint.method === "GET" ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
-            }`}>
+    },
+  ];
+
+  return (
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.8rem', color: '#c9952a', marginBottom: '0.5rem' }}>
+        API Documentation
+      </h1>
+      <p style={{ color: '#7a6a50', fontStyle: 'italic', marginBottom: '3rem' }}>
+        PilgrimHands REST API allows AI agents and developers to hire knights programmatically.
+      </p>
+
+      {/* Authentication */}
+      <section style={{ marginBottom: '2.5rem' }}>
+        <div className="divider" style={{ maxWidth: '400px', marginBottom: '1.5rem' }}>
+          <span style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            Authentication
+          </span>
+        </div>
+        <div className="card">
+          <p style={{ color: '#d4b896', fontSize: '0.9rem', marginBottom: '1rem', lineHeight: 1.6 }}>
+            Use a Bearer token in the{" "}
+            <code style={{ background: 'rgba(201,149,42,0.1)', color: '#c9952a', padding: '2px 6px', fontFamily: "'Share Tech Mono', monospace" }}>Authorization</code>{" "}
+            header. Obtain your API key in the Cabinet.
+          </p>
+          <div style={{ background: '#060402', border: '1px solid #3a2f1a', padding: '1rem 1.25rem', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.85rem', color: '#c9952a' }}>
+            Authorization: Bearer ph_xxxxxxxxxxxxxxxx
+          </div>
+        </div>
+      </section>
+
+      {/* Endpoints */}
+      {endpoints.map((endpoint) => (
+        <section key={endpoint.path} style={{ marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+            <span style={{
+              fontFamily: "'Share Tech Mono', monospace", fontWeight: 700, fontSize: '0.75rem',
+              padding: '3px 10px',
+              background: endpoint.method === "GET" ? 'rgba(42,184,204,0.1)' : 'rgba(106,184,106,0.1)',
+              color: endpoint.method === "GET" ? '#2ab8cc' : '#6ab86a',
+              border: `1px solid ${endpoint.method === "GET" ? '#0d3a42' : '#2a5a2a'}`,
+            }}>
               {endpoint.method}
             </span>
-            <code className="font-mono text-gray-800 text-lg">{endpoint.path}</code>
+            <code style={{ fontFamily: "'Share Tech Mono', monospace", color: '#c0a880', fontSize: '1rem' }}>{endpoint.path}</code>
           </div>
           <div className="card">
-            <p className="text-gray-600 text-sm mb-4">{endpoint.desc}</p>
+            <p style={{ color: '#7a6a50', fontSize: '0.9rem', marginBottom: '1rem', fontStyle: 'italic' }}>{endpoint.desc}</p>
 
             {endpoint.params && endpoint.params.length > 0 && (
-              <div className="mb-4">
-                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                  Query параметры
-                </div>
-                <div className="space-y-1">
+              <div style={{ marginBottom: '1rem' }}>
+                <div className="section-title">Query Parameters</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                   {endpoint.params.map((p) => (
-                    <div key={p.name} className="flex gap-3 text-sm">
-                      <code className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 shrink-0">{p.name}</code>
-                      <span className="text-gray-500">{p.desc}</span>
+                    <div key={p.name} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.85rem' }}>
+                      <code style={{ background: 'rgba(201,149,42,0.08)', color: '#c9952a', padding: '1px 8px', fontFamily: "'Share Tech Mono', monospace", flexShrink: 0 }}>{p.name}</code>
+                      <span style={{ color: '#7a6a50' }}>{p.desc}</span>
                     </div>
                   ))}
                 </div>
@@ -115,27 +126,33 @@ export default function ApiDocsPage() {
             )}
 
             {endpoint.body && (
-              <div className="mb-4">
-                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Request Body</div>
-                <pre className="bg-gray-900 rounded-lg p-4 text-green-300 text-xs overflow-auto">{endpoint.body}</pre>
+              <div style={{ marginBottom: '1rem' }}>
+                <div className="section-title">Request Body</div>
+                <pre style={{ background: '#060402', border: '1px solid #3a2f1a', padding: '1rem', color: '#c9952a', fontSize: '0.8rem', overflow: 'auto', fontFamily: "'Share Tech Mono', monospace" }}>
+                  {endpoint.body}
+                </pre>
               </div>
             )}
 
             <div>
-              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Response</div>
-              <pre className="bg-gray-900 rounded-lg p-4 text-green-300 text-xs overflow-auto">{endpoint.response}</pre>
+              <div className="section-title">Response</div>
+              <pre style={{ background: '#060402', border: '1px solid #3a2f1a', padding: '1rem', color: '#c9952a', fontSize: '0.8rem', overflow: 'auto', fontFamily: "'Share Tech Mono', monospace" }}>
+                {endpoint.response}
+              </pre>
             </div>
           </div>
         </section>
       ))}
 
       {/* Rate limits */}
-      <section className="card bg-amber-50 border-amber-200">
-        <h2 className="font-semibold text-amber-900 mb-2">Лимиты</h2>
-        <ul className="text-amber-800 text-sm space-y-1">
-          <li>• 100 запросов/минуту на API ключ</li>
-          <li>• Максимум 50 результатов на запрос</li>
-          <li>• Webhook поддерживается для уведомлений о статусе задач</li>
+      <section className="card" style={{ background: 'rgba(201,149,42,0.05)', borderColor: '#7a5c1a' }}>
+        <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '0.9rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+          Rate Limits
+        </h2>
+        <ul style={{ color: '#d4b896', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', fontStyle: 'italic' }}>
+          <li>• 100 requests/minute per API key</li>
+          <li>• Maximum 50 results per request</li>
+          <li>• Webhook support for task status notifications</li>
         </ul>
       </section>
     </div>

@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
-  CATEGORY_LABELS, CATEGORY_ICONS, STATUS_LABELS, STATUS_COLORS,
+  CATEGORY_LABELS, CATEGORY_ICONS, STATUS_LABELS, STATUS_CSS,
   formatCurrency, formatDate, cn,
 } from "@/lib/utils";
 import type { Task, TaskCategory } from "@/types";
@@ -32,54 +32,58 @@ export default async function TasksPage({
     .eq("visibility", "public")
     .order("created_at", { ascending: false });
 
-  if (params.category) {
-    query = query.eq("category", params.category);
-  }
-  if (params.search) {
-    query = query.ilike("title", `%${params.search}%`);
-  }
-  if (params.remote === "true") {
-    query = query.eq("is_remote", true);
-  }
+  if (params.category) query = query.eq("category", params.category);
+  if (params.search) query = query.ilike("title", `%${params.search}%`);
+  if (params.remote === "true") query = query.eq("is_remote", true);
 
   const { data: tasksData } = await query.limit(50);
   const tasks: Task[] = (tasksData as Task[]) ?? [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="flex items-center justify-between mb-8">
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="font-serif text-3xl font-bold text-gray-900">Открытые задачи</h1>
-          <p className="text-gray-500 mt-1">{tasks.length} задач доступно</p>
+          <h1 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.8rem', color: '#c9952a', marginBottom: '0.25rem' }}>
+            Open Tasks
+          </h1>
+          <p style={{ color: '#7a6a50', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.85rem' }}>
+            {tasks.length} tasks available
+          </p>
         </div>
         <Link href="/tasks/new" className="btn-primary">
-          + Создать задачу
+          + Post a Task
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2rem' }}>
         <Link
           href="/tasks"
-          className={cn(
-            "badge px-3 py-1.5 rounded-full border transition-colors",
-            !params.category
-              ? "bg-crimson-700 text-white border-crimson-700"
-              : "bg-white text-gray-600 border-gray-200 hover:border-crimson-300"
-          )}
+          style={{
+            display: 'inline-flex', alignItems: 'center',
+            padding: '0.35rem 0.85rem',
+            fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem',
+            border: `1px solid ${!params.category ? '#c9952a' : '#3a2f1a'}`,
+            background: !params.category ? 'rgba(201,149,42,0.15)' : 'transparent',
+            color: !params.category ? '#c9952a' : '#7a6a50',
+            textDecoration: 'none',
+          }}
         >
-          Все
+          All
         </Link>
         {(Object.keys(CATEGORY_LABELS) as TaskCategory[]).map((cat) => (
           <Link
             key={cat}
             href={`/tasks?category=${cat}`}
-            className={cn(
-              "badge px-3 py-1.5 rounded-full border transition-colors",
-              params.category === cat
-                ? "bg-crimson-700 text-white border-crimson-700"
-                : "bg-white text-gray-600 border-gray-200 hover:border-crimson-300"
-            )}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '4px',
+              padding: '0.35rem 0.85rem',
+              fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem',
+              border: `1px solid ${params.category === cat ? '#c9952a' : '#3a2f1a'}`,
+              background: params.category === cat ? 'rgba(201,149,42,0.15)' : 'transparent',
+              color: params.category === cat ? '#c9952a' : '#7a6a50',
+              textDecoration: 'none',
+            }}
           >
             {CATEGORY_ICONS[cat]} {CATEGORY_LABELS[cat]}
           </Link>
@@ -88,55 +92,59 @@ export default async function TasksPage({
 
       {/* Task list */}
       {tasks.length === 0 ? (
-        <div className="text-center py-20">
-          <div className="text-5xl mb-4">⚔️</div>
-          <h3 className="font-serif text-xl text-gray-700 mb-2">Задач пока нет</h3>
-          <p className="text-gray-500">Станьте первым — создайте задачу для рыцарей!</p>
-          <Link href="/tasks/new" className="btn-primary inline-block mt-6">
-            Создать задачу
+        <div style={{ textAlign: 'center', padding: '5rem 1rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚔️</div>
+          <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', marginBottom: '0.5rem' }}>No tasks yet</h3>
+          <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>Be the first — post a task for the knights!</p>
+          <Link href="/tasks/new" className="btn-primary" style={{ display: 'inline-block', marginTop: '1.5rem' }}>
+            Post a Task
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {(tasks as Task[]).map((task) => (
+        <div style={{ display: 'grid', gap: '0.75rem' }}>
+          {tasks.map((task) => (
             <Link
               key={task.id}
               href={`/tasks/${task.id}`}
-              className="card hover:shadow-md hover:border-crimson-200 transition-all block"
+              style={{ textDecoration: 'none' }}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="badge bg-gray-100 text-gray-600 px-2 py-0.5">
-                      {CATEGORY_ICONS[task.category]} {CATEGORY_LABELS[task.category]}
-                    </span>
-                    <span className={cn("badge px-2 py-0.5", STATUS_COLORS[task.status])}>
-                      {STATUS_LABELS[task.status]}
-                    </span>
-                    {task.is_remote && (
-                      <span className="badge bg-blue-50 text-blue-700 px-2 py-0.5">
-                        🌐 Удалённо
+              <div className="card" style={{ cursor: 'pointer' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                      <span className="badge" style={{ background: 'rgba(201,149,42,0.1)', color: '#c9952a', border: '1px solid #3a2f1a', padding: '2px 8px' }}>
+                        {CATEGORY_ICONS[task.category]} {CATEGORY_LABELS[task.category]}
                       </span>
+                      <span className={cn("badge", STATUS_CSS[task.status])} style={{ padding: '2px 8px' }}>
+                        {STATUS_LABELS[task.status]}
+                      </span>
+                      {task.is_remote && (
+                        <span className="badge" style={{ background: 'rgba(42,184,204,0.1)', color: '#2ab8cc', border: '1px solid #0d3a42', padding: '2px 8px' }}>
+                          🌐 Remote
+                        </span>
+                      )}
+                    </div>
+                    <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c0a880', fontSize: '1rem', marginBottom: '0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {task.title}
+                    </h3>
+                    {task.location_name && (
+                      <p style={{ color: '#7a6a50', fontSize: '0.85rem', marginTop: '0.25rem' }}>📍 {task.location_name}</p>
+                    )}
+                    {task.deadline && (
+                      <p style={{ color: '#7a6a50', fontSize: '0.85rem', marginTop: '0.25rem' }}>📅 Until {formatDate(task.deadline)}</p>
                     )}
                   </div>
-                  <h3 className="font-semibold text-gray-900 text-lg truncate">{task.title}</h3>
-                  {task.location_name && (
-                    <p className="text-gray-500 text-sm mt-1">📍 {task.location_name}</p>
-                  )}
-                  {task.deadline && (
-                    <p className="text-gray-500 text-sm mt-1">📅 До {formatDate(task.deadline)}</p>
-                  )}
-                </div>
-                <div className="text-right shrink-0">
-                  {task.budget ? (
-                    <div className="text-xl font-bold text-crimson-700">
-                      {formatCurrency(task.budget, task.currency)}
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    {task.budget ? (
+                      <div style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.2rem', color: '#c9952a', fontWeight: 700 }}>
+                        {formatCurrency(task.budget, task.currency)}
+                      </div>
+                    ) : (
+                      <div style={{ color: '#7a6a50', fontSize: '0.85rem' }}>No budget set</div>
+                    )}
+                    <div style={{ color: '#7a5c1a', fontSize: '0.75rem', marginTop: '0.25rem', fontFamily: "'Share Tech Mono', monospace" }}>
+                      {formatDate(task.created_at)}
                     </div>
-                  ) : (
-                    <div className="text-gray-400 text-sm">Бюджет не указан</div>
-                  )}
-                  <div className="text-gray-400 text-xs mt-1">
-                    {formatDate(task.created_at)}
                   </div>
                 </div>
               </div>

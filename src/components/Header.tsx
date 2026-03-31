@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
-import { Menu, X, Cross } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -20,57 +20,88 @@ export function Header() {
   }, [supabase]);
 
   return (
-    <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header style={{
+      borderBottom: '1px solid #3a2f1a',
+      backgroundColor: 'rgba(6,4,2,0.95)',
+      backdropFilter: 'blur(8px)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50
+    }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🤲</span>
-            <span className="font-serif text-xl font-bold text-crimson-700">
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+            <span style={{ fontSize: '1.5rem' }}>🤲</span>
+            <span style={{
+              fontFamily: "'Cinzel Decorative', serif",
+              fontSize: '1.1rem',
+              fontWeight: 700,
+              color: '#c9952a',
+              letterSpacing: '0.05em'
+            }}>
               PilgrimHands
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link href="/tasks" className="text-gray-600 hover:text-crimson-700 transition-colors">
-              Задачи
-            </Link>
-            <Link href="/knights" className="text-gray-600 hover:text-crimson-700 transition-colors">
-              Рыцари
-            </Link>
-            <Link href="/api-docs" className="text-gray-600 hover:text-crimson-700 transition-colors">
-              API
-            </Link>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }} className="hidden md:flex">
+            {[
+              { href: '/tasks', label: 'Tasks' },
+              { href: '/knights', label: 'Knights' },
+              { href: '/api-docs', label: 'API' },
+            ].map(({ href, label }) => (
+              <Link key={href} href={href} style={{
+                color: '#c0a880',
+                textDecoration: 'none',
+                fontFamily: "'Cinzel', serif",
+                fontSize: '0.8rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                transition: 'color 0.3s'
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#c9952a')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#c0a880')}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
 
           {/* Auth */}
-          <div className="hidden md:flex items-center gap-3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }} className="hidden md:flex">
             {user ? (
               <>
-                <Link href="/dashboard" className="btn-secondary text-sm px-4 py-2">
-                  Кабинет
+                <Link href="/dashboard" className="btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}>
+                  Cabinet
                 </Link>
-                <Link href="/tasks/new" className="btn-primary text-sm px-4 py-2">
-                  + Задача
+                <Link href="/tasks/new" className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}>
+                  + Post Task
                 </Link>
               </>
             ) : (
               <>
-                <Link href="/auth" className="text-gray-600 hover:text-crimson-700 text-sm font-medium">
-                  Войти
+                <Link href="/auth" style={{
+                  color: '#c0a880',
+                  textDecoration: 'none',
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: '0.8rem',
+                  letterSpacing: '0.05em'
+                }}>
+                  Sign In
                 </Link>
-                <Link href="/auth?tab=signup" className="btn-primary text-sm px-4 py-2">
-                  Регистрация
+                <Link href="/auth?tab=signup" className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}>
+                  Join
                 </Link>
               </>
             )}
           </div>
 
-          {/* Mobile menu toggle */}
+          {/* Mobile toggle */}
           <button
-            className="md:hidden p-2 text-gray-600"
+            style={{ color: '#c0a880', background: 'none', border: 'none', cursor: 'pointer' }}
             onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden"
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -78,19 +109,25 @@ export function Header() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-100 space-y-3">
-            <Link href="/tasks" className="block text-gray-700 py-2">Задачи</Link>
-            <Link href="/knights" className="block text-gray-700 py-2">Рыцари</Link>
-            <Link href="/api-docs" className="block text-gray-700 py-2">API</Link>
+          <div style={{
+            borderTop: '1px solid #3a2f1a',
+            padding: '1rem 0',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem'
+          }} className="md:hidden">
+            <Link href="/tasks" style={{ color: '#c0a880', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', textDecoration: 'none' }}>Tasks</Link>
+            <Link href="/knights" style={{ color: '#c0a880', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', textDecoration: 'none' }}>Knights</Link>
+            <Link href="/api-docs" style={{ color: '#c0a880', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', textDecoration: 'none' }}>API</Link>
             {user ? (
               <>
-                <Link href="/dashboard" className="block text-crimson-700 py-2 font-medium">Кабинет</Link>
-                <Link href="/tasks/new" className="block btn-primary text-center">+ Создать задачу</Link>
+                <Link href="/dashboard" className="btn-secondary" style={{ textAlign: 'center' }}>Cabinet</Link>
+                <Link href="/tasks/new" className="btn-primary" style={{ textAlign: 'center' }}>+ Post Task</Link>
               </>
             ) : (
               <>
-                <Link href="/auth" className="block text-gray-700 py-2">Войти</Link>
-                <Link href="/auth?tab=signup" className="block btn-primary text-center">Регистрация</Link>
+                <Link href="/auth" style={{ color: '#c0a880', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', textDecoration: 'none' }}>Sign In</Link>
+                <Link href="/auth?tab=signup" className="btn-primary" style={{ textAlign: 'center' }}>Join the Order</Link>
               </>
             )}
           </div>
