@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useLang } from "@/contexts/LangContext";
 
 export function AcceptOffer({
   offerId,
@@ -14,6 +15,7 @@ export function AcceptOffer({
   knightId: string;
 }) {
   const router = useRouter();
+  const { t } = useLang();
   const [loading, setLoading] = useState(false);
 
   const handleAccept = async () => {
@@ -34,7 +36,7 @@ export function AcceptOffer({
       className="btn-primary"
       style={{ marginTop: '0.5rem', fontSize: '0.7rem', padding: '0.3rem 0.75rem', opacity: loading ? 0.5 : 1 }}
     >
-      {loading ? "..." : "Accept"}
+      {loading ? "..." : t('offer_accept')}
     </button>
   );
 }

@@ -9,6 +9,7 @@ import {
 import type { Task, TaskCategory } from "@/types";
 import { T } from "@/components/T";
 
+
 interface SearchParams {
   category?: string;
   search?: string;
@@ -70,7 +71,7 @@ export default async function TasksPage({
             textDecoration: 'none',
           }}
         >
-          All
+          <T k="all" f="All" />
         </Link>
         {(Object.keys(CATEGORY_LABELS) as TaskCategory[]).map((cat) => (
           <Link
@@ -132,7 +133,7 @@ export default async function TasksPage({
                       <p style={{ color: '#7a6a50', fontSize: '0.85rem', marginTop: '0.25rem' }}>📍 {task.location_name}</p>
                     )}
                     {task.deadline && (
-                      <p style={{ color: '#7a6a50', fontSize: '0.85rem', marginTop: '0.25rem' }}>📅 Until {formatDate(task.deadline)}</p>
+                      <p style={{ color: '#7a6a50', fontSize: '0.85rem', marginTop: '0.25rem' }}>📅 <T k="until" f="Until" /> {formatDate(task.deadline)}</p>
                     )}
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -141,7 +142,7 @@ export default async function TasksPage({
                         {formatCurrency(task.budget, task.currency)}
                       </div>
                     ) : (
-                      <div style={{ color: '#7a6a50', fontSize: '0.85rem' }}>No budget set</div>
+                      <div style={{ color: '#7a6a50', fontSize: '0.85rem' }}><T k="noBudget" f="No budget set" /></div>
                     )}
                     <div style={{ color: '#7a5c1a', fontSize: '0.75rem', marginTop: '0.25rem', fontFamily: "'Share Tech Mono', monospace" }}>
                       {formatDate(task.created_at)}

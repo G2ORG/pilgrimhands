@@ -58,7 +58,7 @@ export default async function DashboardPage() {
           </Link>
           <form action={handleSignOut}>
             <button type="submit" className="btn-secondary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.8rem' }}>
-              Sign Out
+              <T k="signOut" f="Sign Out" />
             </button>
           </form>
         </div>
@@ -87,17 +87,17 @@ export default async function DashboardPage() {
       <section style={{ marginBottom: '2.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
           <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            My Tasks (Client)
+            <T k="dash_myTasks" f="My Tasks (Client)" />
           </h2>
           <Link href="/tasks/new" style={{ color: '#c9952a', textDecoration: 'none', fontSize: '0.8rem', fontFamily: "'Share Tech Mono', monospace" }}>
-            + New Task
+            <T k="dash_newTask" f="+ New Task" />
           </Link>
         </div>
         {clientTasks.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
-            <p style={{ color: '#7a6a50', fontStyle: 'italic' }}>You have not created any tasks yet.</p>
+            <p style={{ color: '#7a6a50', fontStyle: 'italic' }}><T k="dash_noTasks" f="You have not created any tasks yet." /></p>
             <Link href="/tasks/new" className="btn-primary" style={{ display: 'inline-block', marginTop: '1rem', fontSize: '0.8rem' }}>
-              Post First Task
+              <T k="dash_postFirst" f="Post First Task" />
             </Link>
           </div>
         ) : (
@@ -137,7 +137,7 @@ export default async function DashboardPage() {
       {knightTasks.length > 0 && (
         <section style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1rem' }}>
-            My Assignments (Knight)
+            <T k="dash_assignments" f="My Assignments (Knight)" />
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {knightTasks.map((task) => (
@@ -171,13 +171,13 @@ export default async function DashboardPage() {
         }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>⚔️</div>
           <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-            Become a Knight of the Order
+            <T k="dash_beKnight" f="Become a Knight of the Order" />
           </h3>
           <p style={{ color: '#7a6a50', fontSize: '0.9rem', fontStyle: 'italic', marginBottom: '1.25rem' }}>
-            Complete tasks for pilgrims and earn while helping people around the world.
+            <T k="dash_beKnight_sub" f="Complete tasks for pilgrims and earn while helping people around the world." />
           </p>
           <Link href="/knight-onboarding" className="btn-primary" style={{ display: 'inline-block' }}>
-            Apply Now
+            <T k="apply" f="Apply Now" />
           </Link>
         </div>
       )}

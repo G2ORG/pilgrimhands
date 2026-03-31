@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useLang } from "@/contexts/LangContext";
 
 export function OfferForm({
   taskId,
@@ -12,6 +13,7 @@ export function OfferForm({
   currency: string;
 }) {
   const router = useRouter();
+  const { t } = useLang();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ price: "", message: "", eta_hours: "" });
@@ -23,7 +25,7 @@ export function OfferForm({
 
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setError("Please sign in first"); setLoading(false); return; }
+    if (!user) { setError(t('offerSignIn')); setLoading(false); return; }
 
     const { error: dbError } = await supabase.from("offers").insert({
       task_id: taskId,
@@ -43,7 +45,7 @@ export function OfferForm({
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', gap: '0.75rem' }}>
         <div style={{ flex: 1 }}>
-          <label className="label">Price ({currency}) *</label>
+          <label className="label">{t('offer_price').replace('*','').trim()} ({currency}) *</label>
           <input
             type="number" required min={0} step="0.01"
             value={form.price}
@@ -53,7 +55,7 @@ export function OfferForm({
           />
         </div>
         <div style={{ width: '120px' }}>
-          <label className="label">ETA (hours)</label>
+          <label className="label">{t('offer_eta')}</label>
           <input
             type="number" min={1}
             value={form.eta_hours}
@@ -64,12 +66,12 @@ export function OfferForm({
         </div>
       </div>
       <div>
-        <label className="label">Message to client</label>
+        <label className="label">{t('offer_message')}</label>
         <textarea
           rows={3}
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
-          placeholder="Briefly about yourself and how you will complete the task..."
+          placeholder={t('offerMsgPh')}
           className="input-field"
           style={{ resize: 'none' }}
         />
@@ -85,7 +87,7 @@ export function OfferForm({
         className="btn-primary"
         style={{ width: '100%', opacity: loading ? 0.5 : 1 }}
       >
-        {loading ? "Submitting..." : "Submit Offer"}
+        {loading ? t('offer_submitting') : t('offer_submit')}
       </button>
     </form>
   );

@@ -11,6 +11,7 @@ import type { Task, Offer } from "@/types";
 import { OfferForm } from "./OfferForm";
 import { AcceptOffer } from "./AcceptOffer";
 import { PayPalPayment } from "@/components/PayPalPayment";
+import { T } from "@/components/T";
 
 export default async function TaskPage({
   params,
@@ -46,7 +47,7 @@ export default async function TaskPage({
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '2.5rem 1.5rem' }}>
       <div style={{ marginBottom: '1rem' }}>
         <Link href="/tasks" style={{ color: '#7a5c1a', textDecoration: 'none', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.8rem' }}>
-          ← All Tasks
+          <T k="allTasks" f="← All Tasks" />
         </Link>
       </div>
 
@@ -64,7 +65,7 @@ export default async function TaskPage({
               </span>
               {task.is_remote && (
                 <span className="badge" style={{ background: 'rgba(42,184,204,0.1)', color: '#2ab8cc', border: '1px solid #0d3a42', padding: '2px 8px' }}>
-                  🌐 Remote
+                  🌐 <T k="remote" f="Remote" />
                 </span>
               )}
             </div>
@@ -84,7 +85,7 @@ export default async function TaskPage({
           {(isClient || isKnight) && task.offers && task.offers.length > 0 && (
             <div className="card">
               <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1rem', marginBottom: '1rem' }}>
-                Offers ({task.offers.length})
+                <T k="offersLabel" f="Offers" /> ({task.offers.length})
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {(task.offers as Offer[]).map((offer) => (
@@ -133,7 +134,7 @@ export default async function TaskPage({
           {user && !isClient && task.status === "open" && !hasOffer && (
             <div className="card">
               <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1rem', marginBottom: '1rem' }}>
-                Submit an Offer
+                <T k="submitOffer" f="Submit an Offer" />
               </h2>
               <OfferForm taskId={task.id} currency={task.currency} />
             </div>
@@ -142,10 +143,10 @@ export default async function TaskPage({
           {!user && task.status === "open" && (
             <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
               <p style={{ color: '#d4b896', fontStyle: 'italic', marginBottom: '1rem' }}>
-                Sign in to submit an offer for this task
+                <T k="signInOffer" f="Sign in to submit an offer for this task" />
               </p>
               <Link href={`/auth?redirectTo=/tasks/${task.id}`} className="btn-primary" style={{ display: 'inline-block' }}>
-                Sign In / Register
+                <T k="signInBtn" f="Sign In / Register" />
               </Link>
             </div>
           )}
@@ -154,11 +155,11 @@ export default async function TaskPage({
         {/* Sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div className="card">
-            <div className="section-title">Task Details</div>
+            <div className="section-title"><T k="taskDetails" f="Task Details" /></div>
             <dl style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
               {task.budget && (
                 <div>
-                  <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}>Budget</dt>
+                  <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}><T k="budget" f="Budget" /></dt>
                   <dd style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.3rem', color: '#c9952a', fontWeight: 700 }}>
                     {formatCurrency(task.budget, task.currency)}
                   </dd>
@@ -166,18 +167,18 @@ export default async function TaskPage({
               )}
               {task.location_name && (
                 <div>
-                  <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}>Location</dt>
+                  <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}><T k="location" f="Location" /></dt>
                   <dd style={{ color: '#c0a880' }}>📍 {task.location_name}</dd>
                 </div>
               )}
               {task.deadline && (
                 <div>
-                  <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}>Deadline</dt>
+                  <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}><T k="deadline" f="Deadline" /></dt>
                   <dd style={{ color: '#c0a880' }}>📅 {formatDate(task.deadline)}</dd>
                 </div>
               )}
               <div>
-                <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}>Posted</dt>
+                <dt style={{ color: '#7a5c1a', fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase' }}><T k="posted" f="Posted" /></dt>
                 <dd style={{ color: '#c0a880' }}>{formatDate(task.created_at)}</dd>
               </div>
             </dl>
@@ -186,9 +187,9 @@ export default async function TaskPage({
           {/* PayPal payment — shown to client when task is assigned */}
           {isClient && task.status === "assigned" && task.budget && (
             <div className="card">
-              <div className="section-title">Fund Task</div>
+              <div className="section-title"><T k="fundTask" f="Fund Task" /></div>
               <p style={{ color: '#7a6a50', fontSize: '0.85rem', fontStyle: 'italic', marginBottom: '1rem' }}>
-                Pay to lock the budget in escrow. Released to the knight upon completion.
+                <T k="fundEscrow" f="Pay to lock the budget in escrow. Released to the knight upon completion." />
               </p>
               <PayPalPayment
                 taskId={task.id}
@@ -199,7 +200,7 @@ export default async function TaskPage({
           )}
 
           <div className="card">
-            <div className="section-title">Client</div>
+            <div className="section-title"><T k="clientLabel" f="Client" /></div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <div style={{
                 width: '40px', height: '40px',
@@ -210,7 +211,7 @@ export default async function TaskPage({
                 {task.client?.display_name?.[0] ?? "?"}
               </div>
               <div style={{ fontFamily: "'Cinzel', serif", color: '#c0a880', fontSize: '0.9rem' }}>
-                {task.client?.display_name ?? "Anonymous"}
+                {task.client?.display_name ?? <T k="anon" f="Anonymous" />}
               </div>
             </div>
           </div>

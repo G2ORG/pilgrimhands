@@ -202,6 +202,22 @@ const translations: Record<Lang, Record<string, string>> = {
     auth_password: 'Password',
     auth_checkEmail: 'Check your email and confirm your address.',
 
+    // Home page extras
+    hero_cta_become: 'Become a Knight',
+    cta_ready: 'Ready to Begin?',
+    cta_sub: 'Post a task in 2 minutes or join the Order as a knight.',
+    cta_join: 'Join as a Knight',
+    stats_knights_order: 'Knights of the Order',
+    stats_countries_covered: 'Countries covered',
+    stats_commission: 'Platform commission',
+    chapter: 'CHAPTER',
+    ai_for_agents: 'For AI Agents',
+    ai_text_home: 'Your AI agent can hire knights directly via REST API or MCP Server. Search for performers, assign tasks, manage payments — all through API.',
+    until: 'Until',
+    hrs: 'hrs',
+    offerMsgPh: 'Briefly about yourself and how you will complete the task...',
+    offerSignIn: 'Please sign in first',
+
     // API docs
     api_title: 'API Documentation',
     api_sub: 'PilgrimHands REST API allows AI agents and developers to hire knights programmatically.',
@@ -373,6 +389,22 @@ const translations: Record<Lang, Record<string, string>> = {
     auth_password: 'Пароль',
     auth_checkEmail: 'Проверьте почту и подтвердите адрес.',
 
+    // Home page extras
+    hero_cta_become: 'Стать рыцарем',
+    cta_ready: 'Готовы начать?',
+    cta_sub: 'Разместите задание за 2 минуты или вступите в Орден как рыцарь.',
+    cta_join: 'Вступить как рыцарь',
+    stats_knights_order: 'Рыцари Ордена',
+    stats_countries_covered: 'Охваченных стран',
+    stats_commission: 'Комиссия платформы',
+    chapter: 'ГЛАВА',
+    ai_for_agents: 'Для ИИ-агентов',
+    ai_text_home: 'Ваш ИИ-агент может нанимать рыцарей напрямую через REST API или MCP Server. Поиск исполнителей, назначение задач, управление платежами — всё через API.',
+    until: 'До',
+    hrs: 'ч',
+    offerMsgPh: 'Кратко о себе и как вы выполните это задание...',
+    offerSignIn: 'Пожалуйста, войдите в систему',
+
     // API docs
     api_title: 'Документация API',
     api_sub: 'REST API PilgrimHands позволяет ИИ-агентам и разработчикам нанимать рыцарей программно.',
@@ -543,6 +575,22 @@ const translations: Record<Lang, Record<string, string>> = {
     auth_email_ph: 'tu@ejemplo.com',
     auth_password: 'Contraseña',
     auth_checkEmail: 'Revisa tu correo y confirma tu dirección.',
+
+    // Home page extras
+    hero_cta_become: 'Convertirse en caballero',
+    cta_ready: '¿Listo para empezar?',
+    cta_sub: 'Publica una tarea en 2 minutos o únete a la Orden como caballero.',
+    cta_join: 'Unirse como caballero',
+    stats_knights_order: 'Caballeros de la Orden',
+    stats_countries_covered: 'Países cubiertos',
+    stats_commission: 'Comisión de plataforma',
+    chapter: 'CAPÍTULO',
+    ai_for_agents: 'Para agentes IA',
+    ai_text_home: 'Tu agente IA puede contratar caballeros directamente via REST API o MCP Server. Busca ejecutores, asigna tareas, gestiona pagos — todo a través de API.',
+    until: 'Hasta',
+    hrs: 'h',
+    offerMsgPh: 'Brevemente sobre ti y cómo completarás esta tarea...',
+    offerSignIn: 'Por favor inicia sesión primero',
 
     // API docs
     api_title: 'Documentación API',

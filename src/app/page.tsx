@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { CATEGORY_ICONS, CATEGORY_LABELS } from "@/lib/utils";
+import { CATEGORY_ICONS } from "@/lib/utils";
+import { CATEGORY_LABELS_I18N } from "@/lib/i18n";
+import { useLang } from "@/contexts/LangContext";
 import type { TaskCategory } from "@/types";
 
 const CATEGORIES: TaskCategory[] = [
@@ -7,35 +11,23 @@ const CATEGORIES: TaskCategory[] = [
   "tech", "research", "representation", "other",
 ];
 
-const STATS = [
-  { label: "Knights of the Order", value: "50+" },
-  { label: "Countries covered",    value: "12"  },
-  { label: "Tasks completed",      value: "0"   },
-  { label: "Platform commission",  value: "15%" },
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: "I",
-    icon: "📜",
-    title: "Post a Task",
-    desc: "Describe what needs to be done, set the location, budget and deadline. Takes 2 minutes.",
-  },
-  {
-    step: "II",
-    icon: "⚔️",
-    title: "Receive Offers",
-    desc: "Knights of the Order from your region will respond with price and timeline. Choose the best.",
-  },
-  {
-    step: "III",
-    icon: "✝️",
-    title: "Task Fulfilled",
-    desc: "Payment is held in escrow until completion. The knight receives payout after your confirmation.",
-  },
-];
-
 export default function Home() {
+  const { t, lang } = useLang();
+  const catLabels = CATEGORY_LABELS_I18N[lang];
+
+  const STATS = [
+    { label: t('stats_knights_order'), value: "50+" },
+    { label: t('stats_countries_covered'), value: "12" },
+    { label: t('stats_tasks'), value: "0" },
+    { label: t('stats_commission'), value: "15%" },
+  ];
+
+  const HOW_IT_WORKS = [
+    { step: "I",   icon: "📜", title: t('chapter1_title'), desc: t('chapter1_text') },
+    { step: "II",  icon: "⚔️", title: t('chapter2_title'), desc: t('chapter2_text') },
+    { step: "III", icon: "✝️", title: t('chapter3_title'), desc: t('chapter3_text') },
+  ];
+
   return (
     <div style={{ backgroundColor: '#060402' }}>
 
@@ -47,7 +39,6 @@ export default function Home() {
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* decorative rings */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.05,
           backgroundImage: 'radial-gradient(circle, #c9952a 1px, transparent 1px)',
@@ -62,7 +53,7 @@ export default function Home() {
             padding: '6px 16px', marginBottom: '2rem',
             fontFamily: "'Share Tech Mono', monospace", fontSize: '0.8rem', color: '#c9952a',
           }}>
-            ⚔️ Under the aegis of the Order of Christ&apos;s Pilgrims
+            ⚔️ {t('hero_badge')}
           </div>
 
           <h1 style={{
@@ -73,8 +64,9 @@ export default function Home() {
             lineHeight: 1.2,
             marginBottom: '1.5rem',
             textShadow: '0 0 40px rgba(201,149,42,0.3)',
+            whiteSpace: 'pre-line',
           }}>
-            Knights for Your<br />Real-World Tasks
+            {t('hero_title')}
           </h1>
 
           <p style={{
@@ -86,17 +78,15 @@ export default function Home() {
             lineHeight: 1.7,
             fontStyle: 'italic',
           }}>
-            PilgrimHands connects you with verified Knights of the Order worldwide.
-            Pilgrimage, delivery, documents, research — and much more.
-            For humans and AI agents alike.
+            {t('hero_sub')}
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/tasks/new" className="btn-primary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
-              Post a Task
+              {t('hero_cta_post')}
             </Link>
             <Link href="/knight-onboarding" className="btn-secondary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
-              Become a Knight
+              {t('hero_cta_become')}
             </Link>
           </div>
         </div>
@@ -130,21 +120,17 @@ export default function Home() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="divider" style={{ maxWidth: '300px', margin: '0 auto 2.5rem' }}>
             <span style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-              Task Categories
+              {t('categories_title')}
             </span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}
             className="sm:grid-cols-4">
             {CATEGORIES.map((cat) => (
-              <Link
-                key={cat}
-                href={`/tasks?category=${cat}`}
-                style={{ textDecoration: 'none' }}
-              >
+              <Link key={cat} href={`/tasks?category=${cat}`} style={{ textDecoration: 'none' }}>
                 <div className="card" style={{ textAlign: 'center', cursor: 'pointer' }}>
                   <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{CATEGORY_ICONS[cat]}</div>
                   <div style={{ fontFamily: "'Cinzel', serif", fontSize: '0.8rem', color: '#c0a880', letterSpacing: '0.05em' }}>
-                    {CATEGORY_LABELS[cat]}
+                    {catLabels[cat]}
                   </div>
                 </div>
               </Link>
@@ -157,7 +143,7 @@ export default function Home() {
       <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '5rem 1.5rem' }}>
         <div className="divider" style={{ maxWidth: '300px', margin: '0 auto 3rem' }}>
           <span style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-            How It Works
+            {t('how_title')}
           </span>
         </div>
         <div style={{ display: 'grid', gap: '2rem' }} className="md:grid-cols-3">
@@ -169,7 +155,7 @@ export default function Home() {
                 color: '#7a5c1a', fontSize: '0.85rem', letterSpacing: '0.2em',
                 marginBottom: '0.5rem',
               }}>
-                CHAPTER {item.step}
+                {t('chapter')} {item.step}
               </div>
               <h3 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.1rem', marginBottom: '0.75rem' }}>
                 {item.title}
@@ -188,11 +174,10 @@ export default function Home() {
         <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🤖</div>
           <h2 style={{ fontFamily: "'Cinzel', serif", color: '#c9952a', fontSize: '1.6rem', marginBottom: '1rem' }}>
-            For AI Agents
+            {t('ai_for_agents')}
           </h2>
           <p style={{ color: '#d4b896', fontSize: '1rem', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '1.5rem' }}>
-            Your AI agent can hire knights directly via REST API or MCP Server.
-            Search for performers, assign tasks, manage payments — all through API.
+            {t('ai_text_home')}
           </p>
           <div style={{
             background: '#060402', border: '1px solid #3a2f1a',
@@ -208,7 +193,7 @@ export default function Home() {
             </div>
           </div>
           <Link href="/api-docs" className="btn-primary">
-            API Documentation →
+            {t('ai_docs')} →
           </Link>
         </div>
       </section>
@@ -216,17 +201,17 @@ export default function Home() {
       {/* ── CTA ── */}
       <section style={{ maxWidth: '700px', margin: '0 auto', padding: '5rem 1.5rem', textAlign: 'center' }}>
         <h2 style={{ fontFamily: "'Cinzel Decorative', serif", color: '#c9952a', fontSize: '2rem', marginBottom: '1rem' }}>
-          Ready to Begin?
+          {t('cta_ready')}
         </h2>
         <p style={{ color: '#7a6a50', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.7 }}>
-          Post a task in 2 minutes or join the Order as a knight.
+          {t('cta_sub')}
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/tasks/new" className="btn-primary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
-            Post a Task
+            {t('hero_cta_post')}
           </Link>
           <Link href="/knight-onboarding" className="btn-secondary" style={{ fontSize: '0.9rem', padding: '0.85rem 2rem' }}>
-            Join as a Knight
+            {t('cta_join')}
           </Link>
         </div>
       </section>
